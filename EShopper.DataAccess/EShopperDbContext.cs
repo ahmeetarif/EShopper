@@ -18,6 +18,7 @@ namespace EShopper.DataAccess
         public virtual DbSet<SubCategory> SubCategory { get; set; }
         public virtual DbSet<UsersAddress> UsersAddress { get; set; }
         public virtual DbSet<UsersDetail> UsersDetail { get; set; }
+        public virtual DbSet<RefreshTokens> RefreshTokens { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -138,6 +139,30 @@ namespace EShopper.DataAccess
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.UsersAddress)
                     .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull);
+            });
+
+            modelBuilder.Entity<RefreshTokens>(entity =>
+            {
+                entity.HasKey(e => e.UserId);
+
+                entity.Property(e => e.Token)
+                    .IsRequired();
+
+                entity.Property(e => e.JwtId)
+                    .IsRequired();
+
+                entity.Property(e => e.Used)
+                    .IsRequired()
+                    .HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.Invalidated)
+                    .IsRequired()
+                    .HasDefaultValueSql("((0))");
+
+                entity.HasOne(d => d.User)
+                    .WithOne(p => p.RefreshTokens)
+                    .HasForeignKey<RefreshTokens>(d => d.UserId)
                     .OnDelete(DeleteBehavior.ClientSetNull);
             });
 

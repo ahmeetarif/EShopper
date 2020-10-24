@@ -31,9 +31,11 @@ namespace EShopper.Api
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
+            app.UseResponseWrapper();
 
             app.UseRouting();
+
+            app.UseHttpsRedirection();
 
             app.ConfigureSwagger(Configuration);
 

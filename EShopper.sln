@@ -9,17 +9,21 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "api", "api", "{C8DE211B-B2D
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ui", "ui", "{730E62BD-659A-4786-872F-560A6546E52E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EShopper.Api", "EShopper.Api\EShopper.Api.csproj", "{6CA20705-A472-40C7-A7AE-9445DDD419A2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EShopper.Api", "EShopper.Api\EShopper.Api.csproj", "{6CA20705-A472-40C7-A7AE-9445DDD419A2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EShopper.Contracts", "EShopper.Contracts\EShopper.Contracts.csproj", "{ABB7395B-30A7-4D32-BE28-3EF0F338DB65}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EShopper.Contracts", "EShopper.Contracts\EShopper.Contracts.csproj", "{ABB7395B-30A7-4D32-BE28-3EF0F338DB65}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EShopper.DataAccess", "EShopper.DataAccess\EShopper.DataAccess.csproj", "{9D94761F-F6D2-4B3E-BF1C-B8381FF159A5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EShopper.DataAccess", "EShopper.DataAccess\EShopper.DataAccess.csproj", "{9D94761F-F6D2-4B3E-BF1C-B8381FF159A5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EShopper.Entities", "EShopper.Entities\EShopper.Entities.csproj", "{A5428AE0-9D72-439E-884F-B7EF9ADA45E9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EShopper.Entities", "EShopper.Entities\EShopper.Entities.csproj", "{A5428AE0-9D72-439E-884F-B7EF9ADA45E9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EShopper.Business", "EShopper.Business\EShopper.Business.csproj", "{1889995F-A34B-4C1D-93B9-D4C9DE869363}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EShopper.Business", "EShopper.Business\EShopper.Business.csproj", "{1889995F-A34B-4C1D-93B9-D4C9DE869363}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EShopper.Core", "EShopper.Core\EShopper.Core.csproj", "{1550FC82-D3B1-4F5D-A98D-05B8E0D20265}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EShopper.Core", "EShopper.Core\EShopper.Core.csproj", "{1550FC82-D3B1-4F5D-A98D-05B8E0D20265}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EShopper.Common", "EShopper.Common\EShopper.Common.csproj", "{A9D95FF5-EC3B-4337-9B73-523BD2DE1671}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EShopper.Infrastructure", "EShopper.Infrastructure\EShopper.Infrastructure.csproj", "{BE2151DC-B642-482C-B787-07DE05BEBCE9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +55,14 @@ Global
 		{1550FC82-D3B1-4F5D-A98D-05B8E0D20265}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1550FC82-D3B1-4F5D-A98D-05B8E0D20265}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1550FC82-D3B1-4F5D-A98D-05B8E0D20265}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A9D95FF5-EC3B-4337-9B73-523BD2DE1671}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A9D95FF5-EC3B-4337-9B73-523BD2DE1671}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A9D95FF5-EC3B-4337-9B73-523BD2DE1671}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A9D95FF5-EC3B-4337-9B73-523BD2DE1671}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE2151DC-B642-482C-B787-07DE05BEBCE9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE2151DC-B642-482C-B787-07DE05BEBCE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE2151DC-B642-482C-B787-07DE05BEBCE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE2151DC-B642-482C-B787-07DE05BEBCE9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -64,6 +76,8 @@ Global
 		{A5428AE0-9D72-439E-884F-B7EF9ADA45E9} = {C8DE211B-B2D9-46B0-A019-0EB1688D766D}
 		{1889995F-A34B-4C1D-93B9-D4C9DE869363} = {C8DE211B-B2D9-46B0-A019-0EB1688D766D}
 		{1550FC82-D3B1-4F5D-A98D-05B8E0D20265} = {C8DE211B-B2D9-46B0-A019-0EB1688D766D}
+		{A9D95FF5-EC3B-4337-9B73-523BD2DE1671} = {C8DE211B-B2D9-46B0-A019-0EB1688D766D}
+		{BE2151DC-B642-482C-B787-07DE05BEBCE9} = {C8DE211B-B2D9-46B0-A019-0EB1688D766D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EF89CA32-75E8-4B11-B292-FE1CDC45780E}

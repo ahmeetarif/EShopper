@@ -18,9 +18,8 @@ namespace EShopper.Api.Extensions
 
             app.UseSwaggerUI(options =>
             {
-                options.SwaggerEndpoint(swaggerOptions.UIEndpoint, swaggerOptions.Title);
+                options.SwaggerEndpoint(swaggerOptions.UIEndpoint, swaggerOptions.Description);
             });
         }
     }
-}
 }
