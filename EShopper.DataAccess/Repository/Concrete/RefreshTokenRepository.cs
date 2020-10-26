@@ -1,5 +1,6 @@
 ﻿using EShopper.DataAccess.Repository.Abstract;
 using EShopper.Entities.Models;
+using System.Linq;
 
 namespace EShopper.DataAccess.Repository.Concrete
 {
@@ -9,6 +10,12 @@ namespace EShopper.DataAccess.Repository.Concrete
             : base(context)
         {
 
+        }
+
+        public RefreshTokens GetByRefreshToken(string refreshToken)
+        {
+            RefreshTokens refreshTokens = _context.RefreshTokens.SingleOrDefault(x => x.Token == refreshToken);
+            return refreshTokens;
         }
     }
 }

@@ -152,14 +152,6 @@ namespace EShopper.DataAccess
                 entity.Property(e => e.JwtId)
                     .IsRequired();
 
-                entity.Property(e => e.Used)
-                    .IsRequired()
-                    .HasDefaultValueSql("((0))");
-
-                entity.Property(e => e.Invalidated)
-                    .IsRequired()
-                    .HasDefaultValueSql("((0))");
-
                 entity.HasOne(d => d.User)
                     .WithOne(p => p.RefreshTokens)
                     .HasForeignKey<RefreshTokens>(d => d.UserId)

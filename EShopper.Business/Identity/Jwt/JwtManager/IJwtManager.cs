@@ -5,7 +5,7 @@ namespace EShopper.Business.Identity.Jwt.JwtManager
 {
     public interface IJwtManager
     {
-        JwtResponse GenerateTokens(string email, Claim[] claims);
+        JwtResponse GenerateTokens(Claim[] claims, EShopperUser eShopperUser);
         Claim[] GenerateClaims(EShopperUser eShopperUser);
     }
 }

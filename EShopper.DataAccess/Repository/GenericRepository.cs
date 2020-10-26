@@ -18,6 +18,11 @@ namespace EShopper.DataAccess.Repository
             _table = context.Set<TEntity>();
         }
 
+        public void Update(TEntity entity)
+        {
+            _table.Update(entity);
+        }
+
         public void Add(TEntity entity)
         {
             _table.Add(entity);
@@ -30,7 +35,7 @@ namespace EShopper.DataAccess.Repository
 
         public IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> expression)
         {
-            return _table.Where(expression);
+            return _table.Where(expression).ToList();
         }
 
         public IEnumerable<TEntity> GetAll()

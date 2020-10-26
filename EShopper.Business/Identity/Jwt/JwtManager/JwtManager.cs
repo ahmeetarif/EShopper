@@ -1,11 +1,13 @@
 ﻿using EShopper.Business.Options;
 using EShopper.Common.Middleware.Statics;
+using EShopper.DataAccess.UnitOfWork;
 using EShopper.Entities.Models;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IdentityModel.Tokens.Jwt;
-using System.Reflection.Metadata.Ecma335;
+using System.Linq;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace EShopper.Business.Identity.Jwt.JwtManager
@@ -13,8 +15,8 @@ namespace EShopper.Business.Identity.Jwt.JwtManager
     public class JwtManager : IJwtManager
     {
         private readonly JwtOptions _jwtOptions;
-
-        public JwtManager(JwtOptions jwtOptions)
+        public JwtManager(
+            JwtOptions jwtOptions)
         {
             _jwtOptions = jwtOptions;
         }
@@ -23,29 +25,68 @@ namespace EShopper.Business.Identity.Jwt.JwtManager
         {
             var userClaims = new[]
             {
-                new Claim(UserClaimsType.UserId, eShopperUser.Id)
+                new Claim(UserClaimsType.UserId, eShopperUser.Id),
+                new Claim(UserClaimsType.Email, eShopperUser.Email),
+                new Claim(UserClaimsType.Fullname, eShopperUser.UsersDetail.Fullname),
+                new Claim(UserClaimsType.RegisterDate, eShopperUser.UsersDetail.RegisterDate.ToShortDateString()),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             };
 
             return userClaims;
         }
 
-        public JwtResponse GenerateTokens(string email, Claim[] claims)
+        public JwtResponse GenerateTokens(Claim[] claims, EShopperUser eShopperUser)
+        {
+            JwtResponse jwtToken = GenerateToken(eShopperUser, claims);
+            return jwtToken;
+        }
+
+        #region Private Functions
+
+        private JwtResponse GenerateToken(EShopperUser eShopperUser, Claim[] claims)
         {
             SymmetricSecurityKey symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.Secret));
 
-            JwtSecurityToken token = new JwtSecurityToken(
-                issuer: _jwtOptions.Issuer,
-                audience: _jwtOptions.Audience,
-                claims: claims,
-                expires: DateTime.Now.AddMinutes(_jwtOptions.TokenLifetime.TotalMinutes),
-                signingCredentials: new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256));
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(claims),
+                Issuer = _jwtOptions.Issuer,
+                Audience = _jwtOptions.Audience,
+                Expires = DateTime.Now.AddMinutes(_jwtOptions.TokenLifetime.TotalMinutes),
+                SigningCredentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256)
+            };
 
-            string tokenAsString = new JwtSecurityTokenHandler().WriteToken(token);
+            JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
+
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+
+            string tokenAsString = tokenHandler.WriteToken(token);
 
             return new JwtResponse
             {
                 AccessToken = tokenAsString
             };
         }
+
+        private RefreshTokens GenerateRefreshToken(EShopperUser user, string tokenId)
+        {
+            RefreshTokens refreshTokens = new RefreshTokens();
+
+            var randomNumber = new byte[32];
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(randomNumber);
+                refreshTokens.Token = Convert.ToBase64String(randomNumber);
+            }
+            refreshTokens.ExpiryDate = DateTime.Now.AddMonths(6);
+            refreshTokens.CreationDate = DateTime.Now;
+            refreshTokens.User = user;
+            refreshTokens.JwtId = tokenId;
+
+            return refreshTokens;
+        }
+
+        #endregion
+
     }
 }

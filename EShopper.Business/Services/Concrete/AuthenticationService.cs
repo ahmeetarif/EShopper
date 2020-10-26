@@ -52,7 +52,6 @@ namespace EShopper.Business.Services.Concrete
                     UsersDetail usersDetail = new UsersDetail
                     {
                         User = eShopperIdentity,
-                        UserId = eShopperIdentity.Id,
                         Fullname = registerRequestModel.Fullname,
                         RegisterDate = DateTime.UtcNow
                     };
@@ -63,8 +62,9 @@ namespace EShopper.Business.Services.Concrete
                     transaction.Commit();
                     transaction.Dispose();
 
+                    // TODO: Generate RefreshToken...
                     Claim[] userClaims = _jwtManager.GenerateClaims(eShopperIdentity);
-                    JwtResponse jwtResponse = _jwtManager.GenerateTokens(registerRequestModel.Email, userClaims);
+                    JwtResponse jwtResponse = _jwtManager.GenerateTokens(userClaims, eShopperIdentity);
 
                     return new AuthenticationResponseModel
                     {
@@ -74,6 +74,15 @@ namespace EShopper.Business.Services.Concrete
             }
 
             throw new EShopperException();
+        }
+
+        public async Task<AuthenticationResponseModel> LoginAsync(LoginRequestModel loginRequestModel)
+        {
+            if (loginRequestModel == null) throw new EShopperException("Please provide required information!");
+
+
+
+            return null;
         }
 
     }
