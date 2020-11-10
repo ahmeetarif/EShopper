@@ -117,5 +117,7 @@ namespace EShopper.Business.Services.Concrete
 
         #endregion
 
+
+
     }
 }
