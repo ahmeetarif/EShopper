@@ -13,6 +13,13 @@ namespace EShopper.Business.Extensions
             return options;
         }
 
+        public static IRuleBuilder<T, string> Username<T>(this IRuleBuilder<T, string> ruleBuilder)
+        {
+            var options = ruleBuilder
+                .NotEmpty().WithMessage("Please enter your Username!");
+            return options;
+        }
+
         public static IRuleBuilder<T, string> Password<T>(this IRuleBuilder<T, string> ruleBuilder)
         {
             var options = ruleBuilder

@@ -25,7 +25,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EShopper.Common", "EShopper
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EShopper.Infrastructure", "EShopper.Infrastructure\EShopper.Infrastructure.csproj", "{BE2151DC-B642-482C-B787-07DE05BEBCE9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EShopper.UI", "EShopper.UI\EShopper.UI.csproj", "{A38311E6-50B0-4164-8D17-83F8C7EF66C5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EShopper.UI", "EShopper.UI\EShopper.UI.csproj", "{A38311E6-50B0-4164-8D17-83F8C7EF66C5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EShopper.Dto", "EShopper.Dto\EShopper.Dto.csproj", "{73DFA73F-9C2C-47EA-9D3F-E00DF0B81038}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -69,6 +71,10 @@ Global
 		{A38311E6-50B0-4164-8D17-83F8C7EF66C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A38311E6-50B0-4164-8D17-83F8C7EF66C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A38311E6-50B0-4164-8D17-83F8C7EF66C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{73DFA73F-9C2C-47EA-9D3F-E00DF0B81038}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73DFA73F-9C2C-47EA-9D3F-E00DF0B81038}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73DFA73F-9C2C-47EA-9D3F-E00DF0B81038}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73DFA73F-9C2C-47EA-9D3F-E00DF0B81038}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -85,6 +91,7 @@ Global
 		{A9D95FF5-EC3B-4337-9B73-523BD2DE1671} = {C8DE211B-B2D9-46B0-A019-0EB1688D766D}
 		{BE2151DC-B642-482C-B787-07DE05BEBCE9} = {C8DE211B-B2D9-46B0-A019-0EB1688D766D}
 		{A38311E6-50B0-4164-8D17-83F8C7EF66C5} = {730E62BD-659A-4786-872F-560A6546E52E}
+		{73DFA73F-9C2C-47EA-9D3F-E00DF0B81038} = {C8DE211B-B2D9-46B0-A019-0EB1688D766D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EF89CA32-75E8-4B11-B292-FE1CDC45780E}

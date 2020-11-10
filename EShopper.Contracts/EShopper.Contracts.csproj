@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\EShopper.Core\EShopper.Core.csproj" />
+    <ProjectReference Include="..\EShopper.Dto\EShopper.Dto.csproj" />
   </ItemGroup>
 
 </Project>

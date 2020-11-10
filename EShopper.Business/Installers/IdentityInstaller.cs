@@ -1,5 +1,7 @@
-﻿using EShopper.DataAccess;
+﻿using EShopper.Business.Identity;
+using EShopper.DataAccess;
 using EShopper.Entities.Models;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,7 +24,9 @@ namespace EShopper.Business.Installers
                 options.User.RequireUniqueEmail = true;
             })
                 .AddDefaultTokenProviders()
-                .AddEntityFrameworkStores<EShopperDbContext>();
+                .AddUserManager<EShopperUserManager>()
+                .AddEntityFrameworkStores<EShopperDbContext>()
+                .AddTokenProvider("EShopperAuthentication", typeof(DataProtectorTokenProvider<EShopperUser>));
         }
     }
 }

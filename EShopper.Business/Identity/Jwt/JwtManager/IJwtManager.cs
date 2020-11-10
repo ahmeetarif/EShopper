@@ -1,11 +1,12 @@
-﻿using EShopper.Entities.Models;
-using System.Security.Claims;
+﻿using EShopper.Contracts.V1.Requests.Authentication;
+using EShopper.Entities.Models;
+using System.Threading.Tasks;
 
 namespace EShopper.Business.Identity.Jwt.JwtManager
 {
     public interface IJwtManager
     {
-        JwtResponse GenerateTokens(Claim[] claims, EShopperUser eShopperUser);
-        Claim[] GenerateClaims(EShopperUser eShopperUser);
+        Task<JwtManagerResponse> GenerateToken(EShopperUser applicationUser);
+        Task<JwtManagerResponse> RefreshTokenAsync(RefreshTokenRequestModel refreshTokenRequest);
     }
 }

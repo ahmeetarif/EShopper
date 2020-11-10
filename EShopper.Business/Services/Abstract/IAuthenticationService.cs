@@ -7,5 +7,6 @@ namespace EShopper.Business.Services.Abstract
     public interface IAuthenticationService
     {
         Task<AuthenticationResponseModel> RegisterAsync(RegisterRequestModel registerRequestModel);
+        Task<AuthenticationResponseModel> LoginAsync(LoginRequestModel loginRequestModel);
     }
 }

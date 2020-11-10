@@ -1,49 +1,121 @@
 ﻿using EShopper.Business.Options;
+using EShopper.Common.Exceptions;
+using EShopper.Common.Middleware;
 using EShopper.Common.Middleware.Statics;
-using EShopper.DataAccess.UnitOfWork;
+using EShopper.Contracts.V1.Requests.Authentication;
 using EShopper.Entities.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
-using System.Security.Cryptography;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace EShopper.Business.Identity.Jwt.JwtManager
 {
     public class JwtManager : IJwtManager
     {
         private readonly JwtOptions _jwtOptions;
+        private readonly EShopperUserManager _eShopperUserManager;
+        private readonly CurrentUser _currentUser;
+        private readonly TokenValidationParameters _tokenValidationParameters;
         public JwtManager(
-            JwtOptions jwtOptions)
+            JwtOptions jwtOptions,
+            EShopperUserManager eShopperUserManager,
+            CurrentUser currentUser,
+            TokenValidationParameters tokenValidationParameters)
         {
             _jwtOptions = jwtOptions;
+            _eShopperUserManager = eShopperUserManager;
+            _currentUser = currentUser;
+            _tokenValidationParameters = tokenValidationParameters;
         }
 
-        public Claim[] GenerateClaims(EShopperUser eShopperUser)
+        public async Task<JwtManagerResponse> GenerateToken(EShopperUser eShopperUser)
+        {
+            var userClaims = GenerateClaims(eShopperUser);
+            string generateJwtToken = GenerateToken(userClaims);
+            string generateRefreshToken = await GenerateRefreshToken(eShopperUser, _currentUser.AuthenticationType);
+
+            return new JwtManagerResponse
+            {
+                AccessToken = generateJwtToken,
+                RefreshToken = generateRefreshToken
+            };
+        }
+
+        public async Task<JwtManagerResponse> RefreshTokenAsync(RefreshTokenRequestModel refreshTokenRequest)
+        {
+            if (refreshTokenRequest == null) throw new EShopperException("Please provide required information!");
+
+            var validatedToken = GetPrincipalFromToken(refreshTokenRequest.AccessToken);
+
+            if (validatedToken == null) throw new EShopperException("Invalid Access Token!");
+
+            string userEmail = validatedToken.Claims.FirstOrDefault(x => x.Type == UserClaimsType.Email).Value;
+
+            var userDetails = await _eShopperUserManager.FindByEmailAsync(userEmail);
+
+            if (userDetails == null) throw new EShopperException("User not found!");
+
+            var validateRefreshToken = await _eShopperUserManager.VerifyUserTokenAsync(userDetails, "Pertuk", "RefreshToken", refreshTokenRequest.RefreshToken);
+
+            if (!validateRefreshToken)
+            {
+                // Invalid Refresh Token!
+                throw new EShopperException("This refresh token is invalid!");
+            }
+
+            var newClaims = GenerateClaims(userDetails);
+            var newRefreshToken = await GenerateRefreshToken(userDetails, "Pertuk");
+            var newAccessToken = GenerateToken(newClaims);
+
+            return new JwtManagerResponse
+            {
+                AccessToken = newAccessToken,
+                RefreshToken = newRefreshToken
+            };
+        }
+
+        #region Private Functions
+
+        private Claim[] GenerateClaims(EShopperUser eShopperUser)
         {
             var userClaims = new[]
-            {
+           {
                 new Claim(UserClaimsType.UserId, eShopperUser.Id),
                 new Claim(UserClaimsType.Email, eShopperUser.Email),
-                new Claim(UserClaimsType.Fullname, eShopperUser.UsersDetail.Fullname),
-                new Claim(UserClaimsType.RegisterDate, eShopperUser.UsersDetail.RegisterDate.ToShortDateString()),
+                new Claim(UserClaimsType.Fullname, eShopperUser.UserDetails.Fullname),
+                new Claim(UserClaimsType.RegisterDate, eShopperUser.UserDetails.RegisterDate.ToShortDateString()),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             };
 
             return userClaims;
         }
 
-        public JwtResponse GenerateTokens(Claim[] claims, EShopperUser eShopperUser)
+        private async Task<string> GenerateRefreshToken(EShopperUser user, string provider)
         {
-            JwtResponse jwtToken = GenerateToken(eShopperUser, claims);
-            return jwtToken;
+            string getUserAuthenticationToken = await _eShopperUserManager.GetAuthenticationTokenAsync(user, provider, "RefreshToken");
+
+            if (getUserAuthenticationToken != null)
+            {
+                IdentityResult removeUserAuthenticationTokenResult = await _eShopperUserManager.RemoveAuthenticationTokenAsync(user, provider, "RefreshToken");
+            }
+
+            var newUserRefreshToken = await _eShopperUserManager.GenerateUserTokenAsync(user, provider, "RefreshToken");
+            var saveUserRefreshToken = await _eShopperUserManager.SetAuthenticationTokenAsync(user, provider, "RefreshToken", newUserRefreshToken);
+
+            if (!saveUserRefreshToken.Succeeded)
+            {
+                //TODO: Throw Exception?? Try Again?? Return Refresh??
+            }
+
+            return newUserRefreshToken;
         }
 
-        #region Private Functions
-
-        private JwtResponse GenerateToken(EShopperUser eShopperUser, Claim[] claims)
+        private string GenerateToken(Claim[] claims)
         {
             SymmetricSecurityKey symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.Secret));
 
@@ -62,31 +134,41 @@ namespace EShopper.Business.Identity.Jwt.JwtManager
 
             string tokenAsString = tokenHandler.WriteToken(token);
 
-            return new JwtResponse
-            {
-                AccessToken = tokenAsString
-            };
+            return tokenAsString;
         }
 
-        private RefreshTokens GenerateRefreshToken(EShopperUser user, string tokenId)
+        private ClaimsPrincipal GetPrincipalFromToken(string token)
         {
-            RefreshTokens refreshTokens = new RefreshTokens();
+            var jwtHandler = new JwtSecurityTokenHandler();
 
-            var randomNumber = new byte[32];
-            using (var rng = RandomNumberGenerator.Create())
+            try
             {
-                rng.GetBytes(randomNumber);
-                refreshTokens.Token = Convert.ToBase64String(randomNumber);
-            }
-            refreshTokens.ExpiryDate = DateTime.Now.AddMonths(6);
-            refreshTokens.CreationDate = DateTime.Now;
-            refreshTokens.User = user;
-            refreshTokens.JwtId = tokenId;
+                var tokenValidationParameter = _tokenValidationParameters.Clone();
+                tokenValidationParameter.ValidateLifetime = false;
 
-            return refreshTokens;
+                var principals = jwtHandler.ValidateToken(token, tokenValidationParameter, out SecurityToken validatedToken);
+                if (!IsJwtWithValidSecurityAlgorithm(validatedToken))
+                {
+                    return null;
+                }
+
+                return principals;
+
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
+
+        private bool IsJwtWithValidSecurityAlgorithm(SecurityToken validatedToken)
+        {
+            return (validatedToken is JwtSecurityToken jwtSecurityToken) &&
+                   jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256,
+                       StringComparison.InvariantCultureIgnoreCase);
+        }
+
 
         #endregion
-
     }
 }

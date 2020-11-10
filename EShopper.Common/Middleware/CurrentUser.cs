@@ -1,6 +1,7 @@
 ﻿using EShopper.Common.Middleware.Statics;
 using Microsoft.AspNetCore.Http;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace EShopper.Common.Middleware
 {
@@ -17,6 +18,14 @@ namespace EShopper.Common.Middleware
             get
             {
                 return _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type == UserClaimsType.UserId).Value;
+            }
+        }
+
+        public string AuthenticationType
+        {
+            get
+            {
+                return _httpContextAccessor.HttpContext.Request.Headers["AuthenticationType"];
             }
         }
     }

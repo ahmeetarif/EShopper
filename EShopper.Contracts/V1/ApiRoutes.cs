@@ -10,6 +10,7 @@
         {
             public const string BaseAuthentication = Base + "/auth";
             public const string Register = BaseAuthentication + "/register";
+            public const string Login = BaseAuthentication + "/login";
         }
 
     }

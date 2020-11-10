@@ -1,4 +1,5 @@
-﻿using EShopper.Business.Filters;
+﻿using AutoMapper;
+using EShopper.Business.Filters;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -17,10 +18,16 @@ namespace EShopper.Business.Installers
                     options.Filters.Add<ExceptionFilter>();
                     options.Filters.Add<ValidationFilter>();
                 })
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.IgnoreNullValues = true;
+                })
                 .AddFluentValidation(options =>
                 {
                     options.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly());
                 });
+
+            services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
             services.Configure<ApiBehaviorOptions>(options =>
             {

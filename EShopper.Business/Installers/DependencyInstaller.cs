@@ -1,6 +1,7 @@
 ﻿using EShopper.Business.Identity.Jwt.JwtManager;
 using EShopper.Business.Services.Abstract;
 using EShopper.Business.Services.Concrete;
+using EShopper.Common.Middleware;
 using EShopper.DataAccess.Repository.Abstract;
 using EShopper.DataAccess.Repository.Concrete;
 using EShopper.DataAccess.UnitOfWork;
@@ -29,6 +30,8 @@ namespace EShopper.Business.Installers
 
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IJwtManager, JwtManager>();
+
+            services.AddScoped<CurrentUser>();
         }
 
         #endregion

@@ -3,14 +3,17 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using System;
 using System.Text;
 
 namespace EShopper.Business.Installers
 {
-    public class JwtInstaller : IBaseInstaller
+    public class AuthenticationInstaller : IBaseInstaller
     {
         public void InstallServices(IServiceCollection services, IConfiguration configuration)
         {
+            #region Jwt Configurations
+
             var jwtOption = new JwtOptions();
             configuration.GetSection(nameof(JwtOptions)).Bind(jwtOption);
             services.AddSingleton(jwtOption);
@@ -24,10 +27,13 @@ namespace EShopper.Business.Installers
                 RequireExpirationTime = true,
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOption.Secret)),
                 ValidateIssuerSigningKey = true,
-                ValidateLifetime = true
+                ValidateLifetime = true,
+                ClockSkew = TimeSpan.Zero
             };
 
             services.AddSingleton(tokenValidationParameters);
+
+            #endregion
 
             services.AddAuthentication(auth =>
             {

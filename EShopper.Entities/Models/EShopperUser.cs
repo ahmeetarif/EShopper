@@ -11,7 +11,7 @@ namespace EShopper.Entities.Models
             UsersAddress = new HashSet<UsersAddress>();
         }
         public virtual SellerUsers SellerUsers { get; set; }
-        public virtual UsersDetail UsersDetail { get; set; }
+        public virtual UserDetails UserDetails { get; set; }
         public virtual RefreshTokens RefreshTokens { get; set; }
         public virtual ICollection<UsersAddress> UsersAddress { get; set; }
     }
