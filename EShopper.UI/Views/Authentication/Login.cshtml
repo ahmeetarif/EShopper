@@ -1,0 +1,46 @@
+﻿@using EShopper.UI.Models.Authentication
+@model LoginViewModel
+@{
+    ViewData["Title"] = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="shop login section">
+    <div class="container">
+        <div class="col-lg-6 offset-lg-3 col-12">
+
+            <div class="login-form">
+
+                <h2>Login</h2>
+                <form class="form" method="post" asp-action="Login" asp-controller="Authentication" data-ajax="true" data-ajax-method="POST">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label>Email<span>*</span></label>
+                                <input type="email" name="email" placeholder="example@domain.com" asp-for="Email">
+                                <span class="text-danger is-invalid" asp-validation-for="Email"></span>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label>Password<span>*</span></label>
+                                <input type="password" name="password" placeholder="Your password" asp-for="Password">
+                                <span class="text-danger is-invalid" asp-validation-for="Password"></span>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group login-btn">
+                                <button class="btn" type="submit">Login</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+@section Scripts {
+    <partial name="~/Views/Shared/Partials/_ValidationScriptsPartial.cshtml" />
+}
