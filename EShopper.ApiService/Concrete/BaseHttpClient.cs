@@ -20,6 +20,7 @@ namespace EShopper.ApiService.Concrete
         {
             var client = _httpClientFactory.CreateClient("eshopperApi");
             // TODO: Create request headers
+            client.DefaultRequestHeaders.Add("AuthenticationType", "EShopperAuthentication");
             return client;
         }
 

@@ -8,7 +8,6 @@ namespace EShopper.UI.Filters
         {
             if (!context.ModelState.IsValid)
             {
-                return;
             }
         }
 

@@ -1,10 +1,8 @@
 ﻿using EShopper.ApiContracts.V1.Requests.Authentication;
 using EShopper.ApiContracts.V1.Responses.Authentication;
-using EShopper.ApiDto.Models;
 using EShopper.ApiService.Abstract;
 using System.Net.Http;
 using System.Threading.Tasks;
-using EShopper.ApiContracts.V1;
 
 namespace EShopper.ApiService.Concrete
 {
@@ -18,7 +16,7 @@ namespace EShopper.ApiService.Concrete
 
         public async Task<AuthenticationApiResponseModel> LoginAsync(LoginRequestApiModel loginRequestApiModel)
         {
-            var response = await base.PostAsync("", loginRequestApiModel);
+            var response = await base.PostAsync("v1/auth/login", loginRequestApiModel);
             return response.Result;
         }
     }

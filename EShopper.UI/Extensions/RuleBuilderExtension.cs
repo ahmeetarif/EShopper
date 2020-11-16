@@ -12,8 +12,7 @@ namespace EShopper.UI.Extensions
         public static IRuleBuilder<T, string> Email<T>(this IRuleBuilder<T, string> ruleBuilder)
         {
             var options = ruleBuilder
-                .NotEmpty().WithMessage("Please enter your Email Address!")
-                .Must(IsEmailValid).WithMessage("Please enter valid Email Address!");
+                .NotEmpty().WithMessage("Please enter your Email Address!");
             return options;
         }
 
@@ -28,10 +27,7 @@ namespace EShopper.UI.Extensions
         {
             var options = ruleBuilder
                 .NotEmpty().WithMessage("Please enter your Password!")
-                .MinimumLength(6).WithMessage("Your Password must be 6 characters!")
-                .Matches("[A-Z]").WithMessage("Your Password must contain at least one Uppercased letter!")
-                .Matches("[a-z]").WithMessage("Your Password must contain at least one Lowercased letter!")
-                .Matches("[0-9]").WithMessage("Your Password must contain at least one Number!");
+                .MinimumLength(6).WithMessage("Your Password must be 6 characters!");
             return options;
         }
 

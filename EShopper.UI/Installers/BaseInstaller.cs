@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Reflection;
+using AutoMapper;
 
 namespace EShopper.UI.Installers
 {
@@ -21,12 +22,19 @@ namespace EShopper.UI.Installers
                 .AddFluentValidation(options =>
                 {
                     options.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+                })
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.IgnoreNullValues = true;
                 });
 
+            services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
             services.AddHttpContextAccessor();
 
+            // TODO: Reconfigure base address
             EShopperApiOptions eShopperApiOptions = new EShopperApiOptions();
+            configuration.GetSection(nameof(EShopperApiOptions)).Bind(eShopperApiOptions);
             services.AddHttpClient("eshopperApi", config =>
             {
                 config.BaseAddress = new Uri(eShopperApiOptions.BaseAddress);

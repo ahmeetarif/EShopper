@@ -12,6 +12,22 @@ namespace EShopper.UI.Common
             _httpContextAccessor = httpContextAccessor;
         }
 
+        public string AccessToken
+        {
+            get
+            {
+                return _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type == UserClaimTypes.AccessToken).Value;
+            }
+        }
+
+        public string RefreshToken
+        {
+            get
+            {
+                return _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type == UserClaimTypes.RefreshToken).Value;
+            }
+        }
+
         public string Fullname
         {
             get
@@ -25,6 +41,14 @@ namespace EShopper.UI.Common
             get
             {
                 return _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type == UserClaimTypes.Email).Value;
+            }
+        }
+
+        public string Username
+        {
+            get
+            {
+                return _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type == UserClaimTypes.Username).Value;
             }
         }
     }
