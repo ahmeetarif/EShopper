@@ -5,11 +5,11 @@ using EShopper.Common.Middleware;
 using EShopper.DataAccess.Repository.Abstract;
 using EShopper.DataAccess.Repository.Concrete;
 using EShopper.DataAccess.UnitOfWork;
+using EShopper.EmailManager;
+using EShopper.EmailManager.Abstract;
+using EShopper.EmailManager.Concrete;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace EShopper.Business.Installers
 {
@@ -18,6 +18,8 @@ namespace EShopper.Business.Installers
         public void InstallServices(IServiceCollection services, IConfiguration configuration)
         {
             InstallScopes(services);
+            InstallSingletons(services, configuration);
+            InstallTransients(services);
         }
 
         #region Private Functions
@@ -32,6 +34,17 @@ namespace EShopper.Business.Installers
             services.AddScoped<IJwtManager, JwtManager>();
 
             services.AddScoped<CurrentUser>();
+        }
+
+        private void InstallSingletons(IServiceCollection services, IConfiguration configuration)
+        {
+            var emailOptions = configuration.GetSection(nameof(EmailOptions)).Get<EmailOptions>();
+            services.AddSingleton(emailOptions);
+        }
+
+        private void InstallTransients(IServiceCollection services)
+        {
+            services.AddTransient<IEmailSender, EmailSender>();
         }
 
         #endregion

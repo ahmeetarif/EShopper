@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using EShopper.Business.Extensions;
 using EShopper.Business.Identity;
 using EShopper.Business.Identity.Jwt;
 using EShopper.Business.Identity.Jwt.JwtManager;
@@ -8,9 +9,13 @@ using EShopper.Contracts.V1.Requests.Authentication;
 using EShopper.Contracts.V1.Responses.Authentication;
 using EShopper.DataAccess.UnitOfWork;
 using EShopper.Dto.Models;
+using EShopper.EmailManager;
+using EShopper.EmailManager.Abstract;
 using EShopper.Entities.Models;
 using Microsoft.AspNetCore.Identity;
 using System;
+using System.Security.Policy;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 
 namespace EShopper.Business.Services.Concrete
@@ -21,16 +26,19 @@ namespace EShopper.Business.Services.Concrete
         private readonly IMapper _mapper;
         private readonly IJwtManager _jwtManager;
         private readonly EShopperUserManager _eShopperUserManager;
+        private readonly IEmailSender _emailSender;
         public AuthenticationService(
             IUnitOfWork unitOfWork,
             EShopperUserManager eShopperUserManager,
             IJwtManager jwtManager,
-            IMapper mapper)
+            IMapper mapper,
+            IEmailSender emailSender)
         {
             _unitOfWork = unitOfWork;
             _eShopperUserManager = eShopperUserManager;
             _jwtManager = jwtManager;
             _mapper = mapper;
+            _emailSender = emailSender;
         }
 
         #region Register
@@ -117,7 +125,71 @@ namespace EShopper.Business.Services.Concrete
 
         #endregion
 
+        #region Email Confirmation
 
+        public async Task<AuthenticationResponseModel> SendEmailConfirmationLinkAsync(string email)
+        {
+            if (string.IsNullOrEmpty(email) || string.IsNullOrWhiteSpace(email)) throw new EShopperException("Please provide required information!");
+
+            EShopperUser getUserDetails = await _eShopperUserManager.FindByEmailAsync(email);
+            if (getUserDetails == null) throw new EShopperException("User not found!");
+
+            bool isUserEmailConfirmed = await _eShopperUserManager.IsEmailConfirmedAsync(getUserDetails);
+            if (isUserEmailConfirmed) throw new EShopperException("Email address already confirmed!");
+
+            string emailConfirmationLink = await _eShopperUserManager.GenerateEmailConfirmationTokenAsync(getUserDetails);
+
+            try
+            {
+                await _emailSender.SendEmailConfirmation(email, emailConfirmationLink);
+            }
+            catch (Exception)
+            {
+                throw new EShopperException();
+            }
+
+            return new AuthenticationResponseModel
+            {
+                Message = "Email Confirmation Link has successfuly sent to your Mail address! Please check your inbox!"
+            };
+        }
+
+        public async Task<AuthenticationResponseModel> ConfirmEmailAsync(ConfirmEmailRequestModel confirmEmailRequestModel)
+        {
+            if (confirmEmailRequestModel == null) throw new EShopperException("Please provide required information!");
+
+            EShopperUser getUserDetails = await _eShopperUserManager.FindByEmailAsync(confirmEmailRequestModel.Email);
+            if (getUserDetails == null) throw new EShopperException("User not found!");
+
+            bool isEmailConfirmed = await _eShopperUserManager.IsEmailConfirmedAsync(getUserDetails);
+            if (isEmailConfirmed) throw new EShopperException("Email address already confirmed!");
+
+            IdentityResult confirmEmailResult = await _eShopperUserManager.ConfirmEmailAsync(getUserDetails, confirmEmailRequestModel.ConfirmationToken);
+
+            if (confirmEmailResult.Succeeded)
+            {
+                return new AuthenticationResponseModel
+                {
+                    Message = "Email address successfully confirmed!"
+                };
+            }
+
+            throw new EShopperException();
+        }
+
+        #endregion
+
+        #region Password Reset
+
+
+
+        #endregion
+
+        #region External Logins
+
+
+
+        #endregion
 
     }
 }

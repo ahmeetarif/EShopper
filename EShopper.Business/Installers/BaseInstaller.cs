@@ -8,7 +8,7 @@ using System.Reflection;
 
 namespace EShopper.Business.Installers
 {
-    public class MvcInstaller : IBaseInstaller
+    public class BaseInstaller : IBaseInstaller
     {
         public void InstallServices(IServiceCollection services, IConfiguration configuration)
         {

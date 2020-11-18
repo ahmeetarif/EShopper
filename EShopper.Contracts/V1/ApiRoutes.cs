@@ -11,6 +11,8 @@
             public const string BaseAuthentication = Base + "/auth";
             public const string Register = BaseAuthentication + "/register";
             public const string Login = BaseAuthentication + "/login";
+            public const string SendEmailConfirmationLink = BaseAuthentication + "/sendEmailConfirmationLink";
+            public const string ConfirmEmail = BaseAuthentication + "/confirmEmail";
         }
 
     }

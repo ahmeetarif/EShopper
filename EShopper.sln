@@ -27,13 +27,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EShopper.Infrastructure", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EShopper.UI", "EShopper.UI\EShopper.UI.csproj", "{A38311E6-50B0-4164-8D17-83F8C7EF66C5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EShopper.Dto", "EShopper.Dto\EShopper.Dto.csproj", "{73DFA73F-9C2C-47EA-9D3F-E00DF0B81038}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EShopper.Dto", "EShopper.Dto\EShopper.Dto.csproj", "{73DFA73F-9C2C-47EA-9D3F-E00DF0B81038}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EShopper.ApiService", "EShopper.ApiService\EShopper.ApiService.csproj", "{BF9F0ABE-B130-4A1B-9978-36C496A56CBD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EShopper.ApiService", "EShopper.ApiService\EShopper.ApiService.csproj", "{BF9F0ABE-B130-4A1B-9978-36C496A56CBD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EShopper.ApiContracts", "EShopper.ApiContracts\EShopper.ApiContracts.csproj", "{01C26670-E020-4A5E-ADBC-8DDBD8E8009C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EShopper.ApiContracts", "EShopper.ApiContracts\EShopper.ApiContracts.csproj", "{01C26670-E020-4A5E-ADBC-8DDBD8E8009C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EShopper.ApiDto", "EShopper.ApiDto\EShopper.ApiDto.csproj", "{90B7F308-91C0-45E4-A4B7-BDAF7B911BF7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EShopper.ApiDto", "EShopper.ApiDto\EShopper.ApiDto.csproj", "{90B7F308-91C0-45E4-A4B7-BDAF7B911BF7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EShopper.EmailManager", "EShopper.EmailManager\EShopper.EmailManager.csproj", "{A5E5B0CB-FC8F-41D6-80AC-7F68BFF48BE1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -93,6 +95,10 @@ Global
 		{90B7F308-91C0-45E4-A4B7-BDAF7B911BF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{90B7F308-91C0-45E4-A4B7-BDAF7B911BF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{90B7F308-91C0-45E4-A4B7-BDAF7B911BF7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A5E5B0CB-FC8F-41D6-80AC-7F68BFF48BE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5E5B0CB-FC8F-41D6-80AC-7F68BFF48BE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5E5B0CB-FC8F-41D6-80AC-7F68BFF48BE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5E5B0CB-FC8F-41D6-80AC-7F68BFF48BE1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -113,6 +119,7 @@ Global
 		{BF9F0ABE-B130-4A1B-9978-36C496A56CBD} = {730E62BD-659A-4786-872F-560A6546E52E}
 		{01C26670-E020-4A5E-ADBC-8DDBD8E8009C} = {730E62BD-659A-4786-872F-560A6546E52E}
 		{90B7F308-91C0-45E4-A4B7-BDAF7B911BF7} = {730E62BD-659A-4786-872F-560A6546E52E}
+		{A5E5B0CB-FC8F-41D6-80AC-7F68BFF48BE1} = {C8DE211B-B2D9-46B0-A019-0EB1688D766D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EF89CA32-75E8-4B11-B292-FE1CDC45780E}

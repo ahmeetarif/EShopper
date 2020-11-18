@@ -8,5 +8,7 @@ namespace EShopper.Business.Services.Abstract
     {
         Task<AuthenticationResponseModel> RegisterAsync(RegisterRequestModel registerRequestModel);
         Task<AuthenticationResponseModel> LoginAsync(LoginRequestModel loginRequestModel);
+        Task<AuthenticationResponseModel> SendEmailConfirmationLinkAsync(string email);
+        Task<AuthenticationResponseModel> ConfirmEmailAsync(ConfirmEmailRequestModel confirmEmailRequestModel);
     }
 }

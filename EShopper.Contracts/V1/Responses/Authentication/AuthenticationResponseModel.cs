@@ -7,8 +7,8 @@ namespace EShopper.Contracts.V1.Responses.Authentication
     {
         public string AccessToken { get; set; }
         public string RefreshToken { get; set; }
+        public string Message { get; set; }
 
-        [DataMember(EmitDefaultValue = false)]
         public EShopperUserDto EShopperUser { get; set; }
     }
 }
