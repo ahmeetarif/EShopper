@@ -11,7 +11,7 @@ namespace EShopper.Business.Installers
         {
             services.AddDbContext<EShopperDbContext>(options =>
             {
-                options.UseSqlServer(configuration.GetConnectionString("DefaultConnectionString"));
+                options.UseSqlServer(configuration.GetConnectionString("CenutaConnectionString"));
             });
         }
     }

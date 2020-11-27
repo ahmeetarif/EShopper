@@ -1,4 +1,6 @@
-﻿using AutoMapper;
+﻿using System;
+using System.Threading.Tasks;
+using AutoMapper;
 using EShopper.Business.Extensions;
 using EShopper.Business.Identity;
 using EShopper.Business.Identity.Jwt;
@@ -9,14 +11,9 @@ using EShopper.Contracts.V1.Requests.Authentication;
 using EShopper.Contracts.V1.Responses.Authentication;
 using EShopper.DataAccess.UnitOfWork;
 using EShopper.Dto.Models;
-using EShopper.EmailManager;
 using EShopper.EmailManager.Abstract;
 using EShopper.Entities.Models;
 using Microsoft.AspNetCore.Identity;
-using System;
-using System.Security.Policy;
-using System.Text.Encodings.Web;
-using System.Threading.Tasks;
 
 namespace EShopper.Business.Services.Concrete
 {
@@ -145,6 +142,7 @@ namespace EShopper.Business.Services.Concrete
             }
             catch (Exception)
             {
+                // TODO : Log Exception
                 throw new EShopperException();
             }
 
@@ -181,7 +179,47 @@ namespace EShopper.Business.Services.Concrete
 
         #region Password Reset
 
+        public async Task<AuthenticationResponseModel> SendResetPasswordLinkAsync(ForgotPasswordRequestModel forgotPasswordRequestModel)
+        {
+            if (forgotPasswordRequestModel == null) throw new EShopperException("Please provide required information!");
 
+            EShopperUser getUserDetails = await _eShopperUserManager.FindByEmailAsync(forgotPasswordRequestModel.Email);
+            if (getUserDetails == null) throw new EShopperException("User not found!");
+
+            string userResetToken = await _eShopperUserManager.GeneratePasswordResetTokenAsync(getUserDetails);
+
+            try
+            {
+                await _emailSender.SendResetPasswordLinkAsync(forgotPasswordRequestModel.Email, userResetToken);
+            }
+            catch (Exception ex)
+            {
+                //TODO : Log Exception
+                throw new EShopperException();
+            }
+
+            return new AuthenticationResponseModel
+            {
+                Message = "Reset Password Link has successfuly sent to your Mail address! Please check your inbox!"
+            };
+        }
+
+        public async Task<AuthenticationResponseModel> ResetPasswordAsync(ResetPasswordRequestModel resetPasswordRequestModel)
+        {
+            if (string.IsNullOrEmpty(resetPasswordRequestModel.Email) && string.IsNullOrWhiteSpace(resetPasswordRequestModel.Email) || string.IsNullOrEmpty(resetPasswordRequestModel.ResetToken) && string.IsNullOrWhiteSpace(resetPasswordRequestModel.ResetToken)) throw new EShopperException("Please provide required information!");
+
+            EShopperUser getUserDetails = await _eShopperUserManager.FindByEmailAsync(resetPasswordRequestModel.Email);
+            if (getUserDetails == null) throw new EShopperException("User not found!");
+
+            IdentityResult resetPasswordResult = await _eShopperUserManager.ResetPasswordAsync(getUserDetails, resetPasswordRequestModel.ResetToken, resetPasswordRequestModel.Password);
+
+            if (!resetPasswordResult.Succeeded) throw new EShopperException();
+
+            return new AuthenticationResponseModel
+            {
+                Message = "Password has successfully changed!"
+            };
+        }
 
         #endregion
 
