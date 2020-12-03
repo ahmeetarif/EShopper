@@ -10,7 +10,6 @@
         <div class="col-lg-6 offset-lg-3 col-12">
 
             <div class="login-form">
-
                 <h2>Login</h2>
                 <form class="form" method="post" asp-action="Login" asp-controller="Authentication" data-ajax="true" data-ajax-method="POST">
                     <div class="text-danger small" asp-validation-summary="All"></div>
@@ -30,12 +29,33 @@
                             </div>
                         </div>
                         <div class="col-12">
-                            <div class="form-group login-btn">
-                                <button class="btn" type="submit">Login</button>
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="form-group login-btn">
+                                        <button class="btn" type="submit">Login</button>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div>
+                                        <a class="forgot-password-link" href="@Url.Action("forgotPassword", "auth")">Forgot Password?</a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </form>
+
+                <div class="hidden-div-20"></div>
+                <div>
+                    <div class="or-div">
+                        <span>OR</span>
+                    </div>
+                </div>
+                <div class="hidden-div-20"></div>
+
+                <div class="external-div">
+                    <a href="#" class="fb connect">Sign in with Facebook</a>
+                </div>
             </div>
         </div>
     </div>

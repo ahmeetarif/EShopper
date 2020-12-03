@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using EShopper.Business.Extensions;
 using EShopper.Business.Identity;
 using EShopper.Business.Identity.Jwt;
@@ -14,6 +12,8 @@ using EShopper.Dto.Models;
 using EShopper.EmailManager.Abstract;
 using EShopper.Entities.Models;
 using Microsoft.AspNetCore.Identity;
+using System;
+using System.Threading.Tasks;
 
 namespace EShopper.Business.Services.Concrete
 {

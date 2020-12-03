@@ -4,9 +4,7 @@ using EShopper.ApiService.Abstract;
 using EShopper.UI.Common.Statics;
 using EShopper.UI.Models.Authentication;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -50,5 +48,9 @@ namespace EShopper.UI.Controllers
 
             return RedirectToAction(nameof(HomeController.Index), "Home");
         }
+
+        [HttpGet]
+        [Route("register")]
+        public IActionResult Register() => View();
     }
 }

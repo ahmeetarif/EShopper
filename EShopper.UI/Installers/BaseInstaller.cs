@@ -28,6 +28,8 @@ namespace EShopper.UI.Installers
                     options.JsonSerializerOptions.IgnoreNullValues = true;
                 });
 
+            services.AddRazorPages().AddRazorRuntimeCompilation();
+
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
             services.AddHttpContextAccessor();
