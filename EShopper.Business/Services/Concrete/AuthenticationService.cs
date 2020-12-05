@@ -12,13 +12,16 @@ using EShopper.Dto.Models;
 using EShopper.EmailManager.Abstract;
 using EShopper.Entities.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace EShopper.Business.Services.Concrete
 {
     public class AuthenticationService : IAuthenticationService
     {
+        private readonly ILogger<AuthenticationService> _logger;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IJwtManager _jwtManager;
@@ -29,13 +32,15 @@ namespace EShopper.Business.Services.Concrete
             EShopperUserManager eShopperUserManager,
             IJwtManager jwtManager,
             IMapper mapper,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            ILogger<AuthenticationService> logger)
         {
             _unitOfWork = unitOfWork;
             _eShopperUserManager = eShopperUserManager;
             _jwtManager = jwtManager;
             _mapper = mapper;
             _emailSender = emailSender;
+            _logger = logger;
         }
 
         #region Register
@@ -79,6 +84,8 @@ namespace EShopper.Business.Services.Concrete
 
                     EShopperUserDto mappedUserDetails = _mapper.Map<EShopperUserDto>(getUserDetails);
 
+                    _logger.LogInformation($"{getUserDetails.Email} - Registered with EShopperAuthentication");
+
                     return new AuthenticationResponseModel
                     {
                         AccessToken = jwtResponse.AccessToken,
@@ -112,6 +119,8 @@ namespace EShopper.Business.Services.Concrete
 
             EShopperUserDto mappedUserDetails = _mapper.Map<EShopperUserDto>(getUserDetails);
 
+            _logger.LogInformation($"{getUserDetails.Email} - Just landed!");
+
             return new AuthenticationResponseModel
             {
                 AccessToken = getToken.AccessToken,
@@ -140,9 +149,10 @@ namespace EShopper.Business.Services.Concrete
             {
                 await _emailSender.SendEmailConfirmation(email, emailConfirmationLink);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 // TODO : Log Exception
+                _logger.LogError(ex.Message);
                 throw new EShopperException();
             }
 
@@ -194,7 +204,7 @@ namespace EShopper.Business.Services.Concrete
             }
             catch (Exception ex)
             {
-                //TODO : Log Exception
+                _logger.LogError(ex.Message);
                 throw new EShopperException();
             }
 
@@ -213,7 +223,11 @@ namespace EShopper.Business.Services.Concrete
 
             IdentityResult resetPasswordResult = await _eShopperUserManager.ResetPasswordAsync(getUserDetails, resetPasswordRequestModel.ResetToken, resetPasswordRequestModel.Password);
 
-            if (!resetPasswordResult.Succeeded) throw new EShopperException();
+            if (!resetPasswordResult.Succeeded)
+            {
+                _logger.LogError(resetPasswordResult.Errors.Select(x => x.Description).FirstOrDefault());
+                throw new EShopperException();
+            };
 
             return new AuthenticationResponseModel
             {

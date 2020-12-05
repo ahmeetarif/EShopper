@@ -35,6 +35,11 @@ namespace EShopper.ApiService.Concrete
 
             var jsonResponseResult = JsonConvert.DeserializeObject<EShopperApiResponse<T>>(stringResult);
 
+            if (jsonResponseResult.ErrorMessage != null)
+            {
+                throw new System.Exception(jsonResponseResult.ErrorMessage);
+            }
+
             return jsonResponseResult;
         }
 

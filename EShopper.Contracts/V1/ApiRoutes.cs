@@ -15,6 +15,7 @@
             public const string ConfirmEmail = BaseAuthentication + "/confirmEmail";
             public const string ForgotPassword = BaseAuthentication + "/forgotPassword";
             public const string ResetPassword = BaseAuthentication + "/resetPassword";
+            public const string Log = BaseAuthentication + "/log";
         }
 
     }

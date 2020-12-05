@@ -60,7 +60,7 @@ namespace EShopper.Business.Identity.Jwt.JwtManager
 
             if (userDetails == null) throw new EShopperException("User not found!");
 
-            var validateRefreshToken = await _eShopperUserManager.VerifyUserTokenAsync(userDetails, "Pertuk", "RefreshToken", refreshTokenRequest.RefreshToken);
+            var validateRefreshToken = await _eShopperUserManager.VerifyUserTokenAsync(userDetails, "EShopperAuthentication", "RefreshToken", refreshTokenRequest.RefreshToken);
 
             if (!validateRefreshToken)
             {
@@ -69,7 +69,7 @@ namespace EShopper.Business.Identity.Jwt.JwtManager
             }
 
             var newClaims = GenerateClaims(userDetails);
-            var newRefreshToken = await GenerateRefreshToken(userDetails, "Pertuk");
+            var newRefreshToken = await GenerateRefreshToken(userDetails, "EShopperAuthentication");
             var newAccessToken = GenerateToken(newClaims);
 
             return new JwtManagerResponse

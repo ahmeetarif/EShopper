@@ -1,10 +1,10 @@
-﻿using EShopper.Business.Services.Abstract;
+﻿using System.Threading.Tasks;
+using EShopper.Business.Services.Abstract;
 using EShopper.Contracts.V1;
 using EShopper.Contracts.V1.Requests.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace EShopper.Api.Controllers.V1
 {
