@@ -26,11 +26,16 @@ namespace EShopper.Business.Installers
 
         private void InstallScopes(IServiceCollection services)
         {
-            services.AddScoped<IUsersDetailRepository, UsersDetailRepository>();
+            services.AddScoped<IUserDetailsRepository, UserDetailsRepository>();
             services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<ISubCategoryRepository, SubCategoryRepository>();
+
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.AddScoped<IAuthenticationService, AuthenticationService>();
+            services.AddScoped<ICategoryService, CategoryService>();
+            
             services.AddScoped<IJwtManager, JwtManager>();
 
             services.AddScoped<CurrentUser>();

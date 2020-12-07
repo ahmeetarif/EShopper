@@ -1,7 +1,6 @@
-﻿using EShopper.Common.Middleware.Statics;
+﻿using System.Linq;
+using EShopper.Common.Middleware.Statics;
 using Microsoft.AspNetCore.Http;
-using System.Linq;
-using System.Text.RegularExpressions;
 
 namespace EShopper.Common.Middleware
 {

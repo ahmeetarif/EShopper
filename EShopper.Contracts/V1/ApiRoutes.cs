@@ -18,5 +18,12 @@
             public const string Log = BaseAuthentication + "/log";
         }
 
+        public static class Category
+        {
+            public const string BaseCategory = Base + "/category";
+
+            public const string Create = BaseCategory + "/create";
+        }
+
     }
 }

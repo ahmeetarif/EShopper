@@ -17,7 +17,7 @@ namespace EShopper.DataAccess
         public virtual DbSet<SellerUsers> SellerUsers { get; set; }
         public virtual DbSet<SubCategory> SubCategory { get; set; }
         public virtual DbSet<UsersAddress> UsersAddress { get; set; }
-        public virtual DbSet<UserDetails> UsersDetail { get; set; }
+        public virtual DbSet<UserDetails> UserDetails { get; set; }
         public virtual DbSet<RefreshTokens> RefreshTokens { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -27,6 +27,14 @@ namespace EShopper.DataAccess
                 entity.Property(e => e.Title)
                     .IsRequired()
                     .HasMaxLength(100);
+
+                entity.Property(e => e.Description)
+                    .HasMaxLength(500);
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.Categories)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull);
             });
 
             modelBuilder.Entity<Product>(entity =>

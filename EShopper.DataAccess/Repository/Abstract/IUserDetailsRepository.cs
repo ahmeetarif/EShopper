@@ -2,7 +2,7 @@
 
 namespace EShopper.DataAccess.Repository.Abstract
 {
-    public interface IUsersDetailRepository : IGenericRepository<UserDetails, string>
+    public interface IUserDetailsRepository : IGenericRepository<UserDetails, string>
     {
     }
 }

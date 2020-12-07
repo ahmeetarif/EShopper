@@ -1,21 +1,26 @@
 ﻿using EShopper.DataAccess.Repository.Abstract;
 using EShopper.DataAccess.Repository.Concrete;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Storage;
 
 namespace EShopper.DataAccess.UnitOfWork
 {
     public class UnitOfWork : IUnitOfWork
     {
         private RefreshTokenRepository _refreshTokenRepository;
-        private UsersDetailRepository _usersDetailRepository;
+        private UserDetailsRepository _userDetailsRepository;
+        private SubCategoryRepository _subCategoryRepository;
+        private CategoryRepository _categoryRepository;
         public UnitOfWork(EShopperDbContext context)
         {
             EShopperDbContext = context;
         }
         public IRefreshTokenRepository RefreshToken => _refreshTokenRepository = _refreshTokenRepository ?? new RefreshTokenRepository(EShopperDbContext);
 
-        public IUsersDetailRepository UsersDetail => _usersDetailRepository = _usersDetailRepository ?? new UsersDetailRepository(EShopperDbContext);
+        public IUserDetailsRepository UsersDetail => _userDetailsRepository = _userDetailsRepository ?? new UserDetailsRepository(EShopperDbContext);
+
+        public ICategoryRepository Category => _categoryRepository = _categoryRepository ?? new CategoryRepository(EShopperDbContext);
+
+        public ISubCategoryRepository SubCategory => _subCategoryRepository = _subCategoryRepository ?? new SubCategoryRepository(EShopperDbContext);
 
         public EShopperDbContext EShopperDbContext { get; }
 

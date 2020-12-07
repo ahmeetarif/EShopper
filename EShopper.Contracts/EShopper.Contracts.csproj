@@ -9,4 +9,8 @@
     <ProjectReference Include="..\EShopper.Dto\EShopper.Dto.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="V1\Requests\Category\" />
+    <Folder Include="V1\Responses\Category\" />
+  </ItemGroup>
 </Project>

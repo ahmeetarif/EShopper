@@ -1,6 +1,6 @@
-﻿using EShopper.Core.Entities;
+﻿using System.Collections.Generic;
+using EShopper.Core.Entities;
 using Microsoft.AspNetCore.Identity;
-using System.Collections.Generic;
 
 namespace EShopper.Entities.Models
 {
@@ -9,7 +9,10 @@ namespace EShopper.Entities.Models
         public EShopperUser()
         {
             UsersAddress = new HashSet<UsersAddress>();
+            Categories = new HashSet<Category>();
         }
+
+        public virtual ICollection<Category> Categories { get; set; }
         public virtual SellerUsers SellerUsers { get; set; }
         public virtual UserDetails UserDetails { get; set; }
         public virtual RefreshTokens RefreshTokens { get; set; }

@@ -3,9 +3,9 @@ using EShopper.Entities.Models;
 
 namespace EShopper.DataAccess.Repository.Concrete
 {
-    public class UsersDetailRepository : GenericRepository<UserDetails, string>, IUsersDetailRepository
+    public class UserDetailsRepository : GenericRepository<UserDetails, string>, IUserDetailsRepository
     {
-        public UsersDetailRepository(EShopperDbContext context)
+        public UserDetailsRepository(EShopperDbContext context)
             : base(context)
         {
 
