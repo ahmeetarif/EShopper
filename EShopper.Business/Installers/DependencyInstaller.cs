@@ -35,7 +35,9 @@ namespace EShopper.Business.Installers
 
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<ICategoryService, CategoryService>();
-            
+            services.AddScoped<IUserManagerService, UserManagerService>();
+            services.AddScoped<IRoleService, RoleService>();
+
             services.AddScoped<IJwtManager, JwtManager>();
 
             services.AddScoped<CurrentUser>();

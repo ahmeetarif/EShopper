@@ -23,7 +23,26 @@
             public const string BaseCategory = Base + "/category";
 
             public const string Create = BaseCategory + "/create";
+
         }
+
+        public static class UserManager
+        {
+            private const string BaseUserManager = Base + "/userManager";
+
+            public const string AddUserRole = BaseUserManager + "/addUserRole";
+            public const string GetMyRoles = BaseUserManager + "/getRoles";
+        }
+
+        public static class Roles
+        {
+            private const string BaseRoles = Base + "/role";
+
+            public const string GetRoles = BaseRoles + "/getRoles";
+            public const string CreateRole = BaseRoles + "/createRole";
+            public const string DeleteRole = BaseRoles + "/deleteRole";
+        }
+
 
     }
 }

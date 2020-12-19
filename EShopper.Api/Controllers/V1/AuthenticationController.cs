@@ -4,7 +4,6 @@ using EShopper.Contracts.V1;
 using EShopper.Contracts.V1.Requests.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 
 namespace EShopper.Api.Controllers.V1
 {

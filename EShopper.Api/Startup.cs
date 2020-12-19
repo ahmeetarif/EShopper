@@ -36,6 +36,8 @@ namespace EShopper.Api
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+
+                app.UseHsts();
             }
 
             app.UseResponseWrapper();
@@ -45,6 +47,8 @@ namespace EShopper.Api
             app.UseHttpsRedirection();
 
             app.ConfigureSwagger(Configuration);
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

@@ -26,6 +26,7 @@ namespace EShopper.Business.Services.Concrete
         private readonly IMapper _mapper;
         private readonly IJwtManager _jwtManager;
         private readonly EShopperUserManager _eShopperUserManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IEmailSender _emailSender;
         public AuthenticationService(
             IUnitOfWork unitOfWork,
@@ -33,7 +34,8 @@ namespace EShopper.Business.Services.Concrete
             IJwtManager jwtManager,
             IMapper mapper,
             IEmailSender emailSender,
-            ILogger<AuthenticationService> logger)
+            ILogger<AuthenticationService> logger,
+            RoleManager<IdentityRole> roleManager)
         {
             _unitOfWork = unitOfWork;
             _eShopperUserManager = eShopperUserManager;
@@ -41,6 +43,7 @@ namespace EShopper.Business.Services.Concrete
             _mapper = mapper;
             _emailSender = emailSender;
             _logger = logger;
+            _roleManager = roleManager;
         }
 
         #region Register
@@ -61,37 +64,53 @@ namespace EShopper.Business.Services.Concrete
             // Begin Transaction...
             using (var transaction = _unitOfWork.EShopperDbContext.Database.BeginTransaction())
             {
-                IdentityResult registerEShopperUserResult = await _eShopperUserManager.CreateAsync(eShopperIdentity, registerRequestModel.Password);
-
-                if (registerEShopperUserResult.Succeeded)
+                try
                 {
-                    UserDetails usersDetail = new UserDetails
+                    IdentityResult registerEShopperUserResult = await _eShopperUserManager.CreateAsync(eShopperIdentity, registerRequestModel.Password);
+
+                    if (registerEShopperUserResult.Succeeded)
                     {
-                        User = eShopperIdentity,
-                        Fullname = registerRequestModel.Fullname,
-                        RegisterDate = DateTime.UtcNow
-                    };
+                        UserDetails usersDetail = new UserDetails
+                        {
+                            User = eShopperIdentity,
+                            Fullname = registerRequestModel.Fullname,
+                            RegisterDate = DateTime.UtcNow
+                        };
 
-                    _unitOfWork.UsersDetail.Add(usersDetail);
-                    _unitOfWork.Complete();
 
-                    transaction.Commit();
+                        IdentityResult addToRoleResult = await _eShopperUserManager.AddToRoleAsync(eShopperIdentity, "USER");
+
+                        if (!addToRoleResult.Succeeded) throw new EShopperException();
+
+                        _unitOfWork.UsersDetail.Add(usersDetail);
+                        _unitOfWork.Complete();
+
+                        transaction.Commit();
+
+                        JwtManagerResponse jwtResponse = await _jwtManager.GenerateToken(eShopperIdentity);
+
+                        EShopperUser getUserDetails = _eShopperUserManager.GetUserWithUserDetailsByEmail(registerRequestModel.Email);
+
+                        EShopperUserDto mappedUserDetails = _mapper.Map<EShopperUserDto>(getUserDetails);
+
+                        _logger.LogInformation($"{getUserDetails.Email} - Registered with EShopperAuthentication");
+
+                        return new AuthenticationResponseModel
+                        {
+                            AccessToken = jwtResponse.AccessToken,
+                            RefreshToken = jwtResponse.RefreshToken,
+                            EShopperUser = mappedUserDetails
+                        };
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex.Message);
+                    throw new EShopperException();
+                }
+                finally
+                {
                     transaction.Dispose();
-
-                    JwtManagerResponse jwtResponse = await _jwtManager.GenerateToken(eShopperIdentity);
-
-                    EShopperUser getUserDetails = _eShopperUserManager.GetUserWithUserDetailsByEmail(registerRequestModel.Email);
-
-                    EShopperUserDto mappedUserDetails = _mapper.Map<EShopperUserDto>(getUserDetails);
-
-                    _logger.LogInformation($"{getUserDetails.Email} - Registered with EShopperAuthentication");
-
-                    return new AuthenticationResponseModel
-                    {
-                        AccessToken = jwtResponse.AccessToken,
-                        RefreshToken = jwtResponse.RefreshToken,
-                        EShopperUser = mappedUserDetails
-                    };
                 }
             }
 

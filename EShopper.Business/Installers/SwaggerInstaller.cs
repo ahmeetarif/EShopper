@@ -15,7 +15,7 @@ namespace EShopper.Business.Installers
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc(swaggerOptions.Version, new OpenApiInfo { Title = swaggerOptions.Title, Version = swaggerOptions.Version, Description = swaggerOptions.Description });
+                c.SwaggerDoc(swaggerOptions.Version, new OpenApiInfo { Title = swaggerOptions.Description, Version = swaggerOptions.Version, Description = swaggerOptions.Description });
 
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {

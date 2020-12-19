@@ -15,6 +15,13 @@ namespace EShopper.Business.Installers
                     options.RequireClaim(UserClaimsType.CreateCategoryPermission, "true");
                     options.RequireAuthenticatedUser();
                 });
+
+                options.AddPolicy("AddUserToRolePolicy", option =>
+                {
+                    option.RequireClaim(UserClaimsType.AddUserToRolesPermission, "true");
+                    option.RequireAuthenticatedUser();
+                    option.RequireRole("ADMIN");
+                });
             });
         }
     }

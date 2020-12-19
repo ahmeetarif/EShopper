@@ -13,5 +13,6 @@
 
         // Permissions
         public static string CreateCategoryPermission = "createCategoryPermission";
+        public static string AddUserToRolesPermission = "addUserToRolePermission";
     }
 }
