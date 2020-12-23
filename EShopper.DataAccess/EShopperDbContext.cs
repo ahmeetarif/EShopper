@@ -19,6 +19,8 @@ namespace EShopper.DataAccess
         public virtual DbSet<UsersAddress> UsersAddress { get; set; }
         public virtual DbSet<UserDetails> UserDetails { get; set; }
         public virtual DbSet<RefreshTokens> RefreshTokens { get; set; }
+        public virtual DbSet<Permission> Permissions { get; set; }
+        public virtual DbSet<UserPermissions> UserPermissions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -148,6 +150,35 @@ namespace EShopper.DataAccess
                     .WithMany(p => p.UsersAddress)
                     .HasForeignKey(d => d.UserId)
                     .OnDelete(DeleteBehavior.ClientSetNull);
+            });
+
+            modelBuilder.Entity<UserPermissions>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.Property(e => e.UserId)
+                    .IsRequired()
+                    .HasMaxLength(450);
+
+                entity.HasOne(d => d.Permission)
+                    .WithMany()
+                    .HasForeignKey(d => d.PermissionId)
+                    .OnDelete(DeleteBehavior.ClientSetNull);
+
+                entity.HasOne(d => d.User)
+                    .WithMany()
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull);
+
+            });
+
+            modelBuilder.Entity<Permission>(entity =>
+            {
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(256);
             });
 
             modelBuilder.Entity<RefreshTokens>(entity =>

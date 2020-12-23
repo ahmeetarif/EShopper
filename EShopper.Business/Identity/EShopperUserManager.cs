@@ -74,5 +74,11 @@ namespace EShopper.Business.Identity
 
         #endregion
 
+        #region Permissions
+
+
+
+        #endregion
+
     }
 }

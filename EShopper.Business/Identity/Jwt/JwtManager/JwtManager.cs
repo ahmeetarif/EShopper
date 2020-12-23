@@ -35,7 +35,7 @@ namespace EShopper.Business.Identity.Jwt.JwtManager
 
         public async Task<JwtManagerResponse> GenerateToken(EShopperUser eShopperUser)
         {
-            var userClaims = GenerateClaims(eShopperUser);
+            var userClaims = await GenerateClaims(eShopperUser);
             string generateJwtToken = GenerateToken(userClaims);
             string generateRefreshToken = await GenerateRefreshToken(eShopperUser, _currentUser.AuthenticationType);
 
@@ -68,7 +68,7 @@ namespace EShopper.Business.Identity.Jwt.JwtManager
                 throw new EShopperException("This refresh token is invalid!");
             }
 
-            var newClaims = GenerateClaims(userDetails);
+            var newClaims = await GenerateClaims(userDetails);
             var newRefreshToken = await GenerateRefreshToken(userDetails, "EShopperAuthentication");
             var newAccessToken = GenerateToken(newClaims);
 
@@ -81,8 +81,10 @@ namespace EShopper.Business.Identity.Jwt.JwtManager
 
         #region Private Functions
 
-        private Claim[] GenerateClaims(EShopperUser eShopperUser)
+        private async Task<Claim[]> GenerateClaims(EShopperUser eShopperUser)
         {
+            var roles = await _eShopperUserManager.GetRolesAsync(eShopperUser);
+
             var userClaims = new[]
            {
                 new Claim(UserClaimsType.UserId, eShopperUser.Id),

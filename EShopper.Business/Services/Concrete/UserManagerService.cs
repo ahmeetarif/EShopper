@@ -1,13 +1,14 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using EShopper.Business.Identity;
 using EShopper.Business.Services.Abstract;
 using EShopper.Common.Exceptions;
 using EShopper.Common.Middleware;
+using EShopper.Contracts.V1.Requests.UserManager;
+using EShopper.Contracts.V1.Responses.UserManager;
 using EShopper.Entities.Models;
 using Microsoft.AspNetCore.Identity;
-using System.Linq;
-using EShopper.Contracts.V1.Responses.UserManager;
 
 namespace EShopper.Business.Services.Concrete
 {
@@ -25,23 +26,28 @@ namespace EShopper.Business.Services.Concrete
             _currentUser = currentUser;
         }
 
-        public async Task<UserManagerResponseModel> AddUserRoleAsync(string roleName)
+        public async Task<UserManagerResponseModel> AddUserRoleAsync(AddUserToRoleRequestModel addUserToRoleRequestModel)
         {
-            if (string.IsNullOrEmpty(roleName) || string.IsNullOrWhiteSpace(roleName)) throw new EShopperException("Please provide required information!");
+            if (string.IsNullOrEmpty(addUserToRoleRequestModel.Rolename) && string.IsNullOrEmpty(addUserToRoleRequestModel.Username) || string.IsNullOrWhiteSpace(addUserToRoleRequestModel.Rolename) && string.IsNullOrWhiteSpace(addUserToRoleRequestModel.Username))
+            {
+                throw new EShopperException("Please provide required information!");
+            }
 
-            bool isRoleExist = await _roleManager.RoleExistsAsync(roleName);
-            if (!isRoleExist) throw new EShopperException($"Role : {roleName} not exist");
+            EShopperUser getUserInformation = await _eShopperUserManager.FindByNameAsync(addUserToRoleRequestModel.Username);
+            if (getUserInformation == null) throw new EShopperException($"User : {addUserToRoleRequestModel.Username} not found!");
 
-            EShopperUser user = await _eShopperUserManager.FindByIdAsync(_currentUser.Id);
+            bool isRoleExist = await _roleManager.RoleExistsAsync(addUserToRoleRequestModel.Rolename);
 
-            IdentityResult addToRoleResult = await _eShopperUserManager.AddToRoleAsync(user, roleName);
+            if (!isRoleExist)
+                throw new EShopperException($"Role : {addUserToRoleRequestModel.Rolename} not exist!");
+
+            IdentityResult addToRoleResult = await _eShopperUserManager.AddToRoleAsync(getUserInformation, addUserToRoleRequestModel.Rolename);
 
             if (addToRoleResult.Succeeded)
             {
-                // Something ..
                 return new UserManagerResponseModel
                 {
-                    Message = $"User is now in Role : {roleName}"
+                    Message = $"User added to Role : {addUserToRoleRequestModel.Rolename}"
                 };
             }
 

@@ -31,6 +31,7 @@ namespace EShopper.ApiService.Concrete
             var stringContent = new StringContent(jsonRequestData, UnicodeEncoding.UTF8, "application/json");
 
             var result = await client.PostAsync(requestUri, stringContent);
+            result.EnsureSuccessStatusCode();
             var stringResult = await result.Content.ReadAsStringAsync();
 
             var jsonResponseResult = JsonConvert.DeserializeObject<EShopperApiResponse<T>>(stringResult);

@@ -13,5 +13,6 @@
     <Folder Include="V1\Requests\Category\" />
     <Folder Include="V1\Responses\Category\" />
     <Folder Include="V1\Responses\UserManager\" />
+    <Folder Include="V1\Requests\UserManager\" />
   </ItemGroup>
 </Project>

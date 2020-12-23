@@ -10,6 +10,8 @@ namespace EShopper.DataAccess.UnitOfWork
         IUserDetailsRepository UsersDetail { get; }
         ICategoryRepository Category { get; }
         ISubCategoryRepository SubCategory { get; }
+        IPermissionRepository Permission { get; }
+        IUserPermissionsRepository UserPermissions { get; }
 
         EShopperDbContext EShopperDbContext { get; }
 
